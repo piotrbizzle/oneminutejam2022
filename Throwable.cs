@@ -7,10 +7,13 @@ public class Throwable : MonoBehaviour
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
-    
+    private float BaseScoreValue = 100.0f;
+    private float SecondsToRot = 30;
+
+    private float currentRot;
     private float initialMomentum;
     private float momentum;
-
+    
     public void Start() {
  	// collision
         this.gameObject.AddComponent<BoxCollider2D>();
@@ -18,9 +21,23 @@ public class Throwable : MonoBehaviour
 
 	// rendering
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
+
+	// rot
+	this.currentRot = this.SecondsToRot;
     }
 
     public void Update() {
+	// rot
+	this.currentRot -= Time.deltaTime;
+	if (this.currentRot < 0) {
+	    this.RotAway();
+	}
+
+	// placeholder
+	float shade = this.currentRot / this.SecondsToRot;
+	this.GetComponent<SpriteRenderer>().color = new Color(shade, shade, shade, 1.0f);
+
+	// check if object thrown
 	if (this.initialMomentum == 0) {
 	    return;
 	}
@@ -33,7 +50,6 @@ public class Throwable : MonoBehaviour
 
 	// break once the object slows down enough
 	if (this.momentum < this.initialMomentum * this.MomentumToBreakRatio) {
-	    // GameObject.Destroy(this.gameObject);
 	    this.momentum = 0;
 	    this.initialMomentum = 0;
 	}
@@ -42,5 +58,13 @@ public class Throwable : MonoBehaviour
     public void Throw(float initialMomentum) {
 	this.initialMomentum = initialMomentum;
 	this.momentum = initialMomentum;
+    }
+
+    public int GetScoreValue() {
+	return (int)(this.currentRot / this.SecondsToRot * this.BaseScoreValue);
+    }
+    
+    private void RotAway() {
+	GameObject.Destroy(this.gameObject);
     }
 }

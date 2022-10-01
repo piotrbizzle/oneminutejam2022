@@ -25,7 +25,6 @@ public class Player : MonoBehaviour  {
     public void Start() {
 	// collision
         this.gameObject.AddComponent<BoxCollider2D>();
-	this.gameObject.GetComponent<BoxCollider2D>().size = this.GetComponent<SpriteRenderer>().size;
 
 	Rigidbody2D rb = this.gameObject.AddComponent<Rigidbody2D>();
 	rb.gravityScale = 0.0f;
