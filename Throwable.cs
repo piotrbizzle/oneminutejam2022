@@ -28,7 +28,7 @@ public class Throwable : MonoBehaviour
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
 
 	// rot
-	this.currentRot = Random.Range(this.SecondsToRot, 3 * this.SecondsToRot);
+	this.currentRot = Random.Range(this.SecondsToRot, 6 * this.SecondsToRot);
     }
 
     public void Update() {

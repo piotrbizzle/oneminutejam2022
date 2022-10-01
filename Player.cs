@@ -20,7 +20,7 @@ public class Player : MonoBehaviour  {
     private float yMomentum;
     private float meterScale = 0.0f;
 
-    private bool spacePressed;
+    private bool mousePressed;
 
     public void Start() {
 	// collision
@@ -39,9 +39,8 @@ public class Player : MonoBehaviour  {
 	bool down = Input.GetKey("s");
 	bool left = Input.GetKey("a");
 	bool right = Input.GetKey("d");
-	bool mousePressed = Input.GetMouseButton(0);
+	this.mousePressed = Input.GetMouseButton(0);
 	bool mouseReleased = Input.GetMouseButtonUp(0);
-	this.spacePressed = Input.GetKey("space");
 
 	// throw held item
 	if (mouseReleased) {
@@ -49,7 +48,7 @@ public class Player : MonoBehaviour  {
 	}
 
 	// charge meter
-	if (mousePressed && this.heldThrowableChild != null) {
+	if (this.mousePressed && this.heldThrowableChild != null) {
 	    if (this.meterScale < this.StartingCharge) {
 		this.meterScale = this.StartingCharge;
 	    }
@@ -112,7 +111,7 @@ public class Player : MonoBehaviour  {
 
     public void OnTriggerStay2D(Collider2D collider) {
 	Throwable throwable = collider.gameObject.GetComponent<Throwable>();
-	if (throwable != null && this.spacePressed) {
+	if (throwable != null && this.mousePressed) {
 	    this.PickUp(throwable);
 	    return;
 	}
@@ -141,4 +140,3 @@ public class Player : MonoBehaviour  {
 	this.heldThrowableChild = null;
     }
 }
-
