@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour  {
     // configurables
-    private float RunSpeed = 3.5f;
-    private float WalkSpeed = 2.5f;
-    private float Drag = 15.0f;
-    private float StartingCharge = 0.2f;
-    private float ChargeSpeed = 1.0f;
-    private float ThrowSpeed = 10.0f;
+    public float RunSpeed = 3.5f;
+    public float WalkSpeed = 2.5f;
+    public float Drag = 15.0f;
+    public float StartingCharge = 0.2f;
+    public float ChargeSpeed = 1.0f;
+    public float ThrowSpeed = 10.0f;
 
     // related objects
     public GameObject eventSystemGo;

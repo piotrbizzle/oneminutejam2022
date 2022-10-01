@@ -7,17 +7,22 @@ public class Enemy : MonoBehaviour
     // configurables
     private float LungeSpeed = 3.0f;
     private float LungeCooldown = 1.0f;
-    private float LungeAggroDistance = 1.0f;
+    private float LungeAggroDistance = 1.0f;    
     private float LungeDuration = 0.3f;
     private float WalkSpeed = 1.0f;
-
+    private float WalkAggroDistance = 4.0f;
+    private float WanderSpeed = 0.35f;
+    private float WanderDuration = 0.5f;
+    
     // related objects
     public Player player;
 
     // movement
     private float currentLungeCooldown;
     private float currentLungeDuration;
-    
+    private Vector3 wanderVector;
+    private float currentWanderDuration;
+
     void Start() {	
 	// collision
         this.gameObject.AddComponent<BoxCollider2D>();
@@ -27,6 +32,10 @@ public class Enemy : MonoBehaviour
 	rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 	rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 	rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
+	this.WalkSpeed += Random.Range(-5, 5) * 0.1f;
+	this.LungeSpeed += Random.Range(-5, 5) * 0.1f;
+	this.WanderSpeed += Random.Range(-5, 5) * 0.05f;
     }
 
     void Update() {
@@ -50,14 +59,25 @@ public class Enemy : MonoBehaviour
 	    }
 	    return;
 	}
-
-	// otherwise, move normal speed
-	this.transform.Translate(normalizedToPlayer * this.WalkSpeed * Time.deltaTime);
-	
-	// then, maybe start a lunge
+	     
 	float distanceToPlayer = Vector3.Distance(this.transform.position, this.player.transform.position);
+	
 	if (distanceToPlayer < this.LungeAggroDistance) {
+	    // maybe start a lunge
 	    this.currentLungeDuration = this.LungeDuration;
+	} else if (distanceToPlayer < this.WalkAggroDistance) {
+	    // maybe move normal speed toward player
+	    this.transform.Translate(normalizedToPlayer * this.WalkSpeed * Time.deltaTime);	
+	} else {
+	    // enemy wanders
+	    if (this.currentWanderDuration < 0) {
+		// choose new wander vector
+		this.wanderVector = Vector3.Normalize(new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), 0.0f));
+		this.currentWanderDuration = this.WanderDuration;		
+	    }
+
+	    this.transform.Translate(this.wanderVector * this.WalkSpeed * Time.deltaTime);
+	    this.currentWanderDuration -= Time.deltaTime;
 	}
     }
 
