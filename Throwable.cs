@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Throwable : MonoBehaviour
 {
-    // configurables
     public Sprite enemySprite;
 
+    // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
     private float BaseScoreValue = 100.0f;
-    private float SecondsToRot = 10.0f;
 
     // related objects
     public Player player;
 
+    public float secondsToRot;
     private float currentRot;
     private float initialMomentum;
     public float momentum;
@@ -28,7 +28,7 @@ public class Throwable : MonoBehaviour
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
 
 	// rot
-	this.currentRot = Random.Range(this.SecondsToRot, 6 * this.SecondsToRot);
+	this.currentRot = this.secondsToRot;
     }
 
     public void Update() {
@@ -38,8 +38,8 @@ public class Throwable : MonoBehaviour
 	    this.RotAway();
 	}
 
-	// placeholder
-	float shade = this.currentRot / this.SecondsToRot;
+	// TODO: go green -> yellow -> orange etc
+	float shade = this.currentRot / this.secondsToRot;
 	this.GetComponent<SpriteRenderer>().color = new Color(shade, shade, shade, 1.0f);
 
 	// check if object thrown
@@ -66,7 +66,7 @@ public class Throwable : MonoBehaviour
     }
 
     public int GetScoreValue() {
-	return (int)(this.currentRot / this.SecondsToRot * this.BaseScoreValue);
+	return (int)(this.currentRot / this.secondsToRot * this.BaseScoreValue);
     }
     
     private void RotAway() {

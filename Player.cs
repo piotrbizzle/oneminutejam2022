@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour  {
     // configurables
-    private float MaxSpeed = 3.0f;
+    private float RunSpeed = 3.5f;
+    private float WalkSpeed = 2.5f;
     private float Drag = 15.0f;
     private float StartingCharge = 0.2f;
     private float ChargeSpeed = 1.0f;
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour  {
 	rb.gravityScale = 0.0f;
 	rb.constraints = RigidbodyConstraints2D.FreezeRotation;
 	rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-	rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+	rb.sleepMode = RigidbodySleepMode2D.NeverSleep;	
     }
 
     public void Update() {
@@ -67,10 +68,11 @@ public class Player : MonoBehaviour  {
 	this.pointerChild.meterChild.transform.localPosition = new Vector3(0.0f, this.meterScale / 3.0f, 0.0f);
 
 	// set momentum
+	float speed = this.heldThrowableChild == null ? this.RunSpeed : this.WalkSpeed;
 	if (up && !down) {
-	    this.yMomentum = this.MaxSpeed;
+	    this.yMomentum = speed;
 	} else if (down && !up) {
-	    this.yMomentum = this.MaxSpeed * -1;
+	    this.yMomentum = speed * -1;
 	} else if (this.yMomentum > 0) {
 	    this.yMomentum -= this.Drag * Time.deltaTime;
 	    if (this.yMomentum < 0) {
@@ -84,9 +86,9 @@ public class Player : MonoBehaviour  {
 	}
 
 	if (left && !right) {
-	    this.xMomentum = this.MaxSpeed;
+	    this.xMomentum = speed;
 	} else if (right && !left) {
-	    this.xMomentum = this.MaxSpeed * -1;
+	    this.xMomentum = speed * -1;
 	} else if (this.xMomentum > 0) {
 	    this.xMomentum -= this.Drag * Time.deltaTime;
 	    if (this.xMomentum < 0) {
@@ -125,15 +127,17 @@ public class Player : MonoBehaviour  {
 	
 	// pick up item
 	throwable.gameObject.transform.parent = this.pointerChild.transform;
-	throwable.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+	throwable.gameObject.transform.localPosition = new Vector3(0, -0.1f, 0);
 	throwable.GetComponent<SpriteRenderer>().sortingLayerName = "Held";
 	this.heldThrowableChild = throwable;
+	throwable.Throw(0);
     }
 
     private void Throw() {
 	if (this.heldThrowableChild == null) {
 	    return;
 	}
+	this.heldThrowableChild.transform.localPosition = new Vector3(0, 0.1f, 0);
 	this.heldThrowableChild.Throw(this.ThrowSpeed * this.meterScale);
 	this.heldThrowableChild.transform.parent = this.transform.parent;
 	this.heldThrowableChild.transform.rotation = this.pointerChild.transform.rotation;
