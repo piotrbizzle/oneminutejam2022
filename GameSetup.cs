@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,6 @@ using UnityEngine;
 public class GameSetup : MonoBehaviour
 {
     // configurables
-    public int RandomSeed = 1;
     public int NumberOfBarriers = 12;
     public int[] NumberOfPumpkins = new int[]{0, 10, 10, 10, 10, 10};  // rotten to fresh
     public float PumpkinJiggleAmount = 0.1f;
@@ -21,7 +21,12 @@ public class GameSetup : MonoBehaviour
     public void Start()
     {
 	// init randomizer
-	// Random.InitState(this.RandomSeed);
+
+	// if (seedString == "") {
+	// UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
+	// } else {
+	// UnityEngine.Random.InitState(seedString.GetHashCode());
+	//}
 	
 	// make a list of all allowed spaces for objects on a grid
 	// grid origin in bottom left
@@ -47,7 +52,7 @@ public class GameSetup : MonoBehaviour
 	    barrierGo.transform.position = GameSetup.GridPointToWorldPoint(GameSetup.PopRandomSpace(availableSpaces));
 
 	    // randomly rotate barriers	    		
-	    barrierGo.transform.rotation = new Quaternion(0, 0, Random.Range(0, 3) / 2.0f, 1.0f);
+	    barrierGo.transform.rotation = new Quaternion(0, 0, UnityEngine.Random.Range(0, 3) / 2.0f, 1.0f);
 	}
 
 	// distribute pumpkins to random spaces
@@ -59,7 +64,7 @@ public class GameSetup : MonoBehaviour
 		// copy properties from prototype
 		pumpkinGo.AddComponent<SpriteRenderer>().sprite = pumpkinPrototype.GetComponent<SpriteRenderer>().sprite;
 		Throwable throwable = pumpkinGo.AddComponent<Throwable>();
-		throwable.currentRot = 10.0f * freshness + Random.Range(1, 20) * 0.5f;
+		throwable.currentRot = 10.0f * freshness + UnityEngine.Random.Range(1, 20) * 0.5f;
 		throwable.player = this.pumpkinPrototype.player;
 		throwable.enemySprite = this.pumpkinPrototype.enemySprite;
 				
@@ -67,11 +72,11 @@ public class GameSetup : MonoBehaviour
 		pumpkinGo.transform.position = GameSetup.GridPointToWorldPoint(GameSetup.PopRandomSpace(availableSpaces));
 		pumpkinGo.transform.Translate(
 		    new Vector3(
-			Random.Range(
+			UnityEngine.Random.Range(
 			    -1 * this.PumpkinJiggleRange,
 			    this.PumpkinJiggleRange
 			) * this.PumpkinJiggleAmount,
-			Random.Range(
+			UnityEngine.Random.Range(
 			    -1 * this.PumpkinJiggleRange,
 			    this.PumpkinJiggleRange
 			) * this.PumpkinJiggleAmount,
@@ -110,7 +115,7 @@ public class GameSetup : MonoBehaviour
     }
 
     private static Vector2 PopRandomSpace(List<Vector2> availableSpaces) {
-	int index = Random.Range(0, availableSpaces.Count - 1);
+	int index = UnityEngine.Random.Range(0, availableSpaces.Count - 1);
 	Vector2 space = availableSpaces[index];
 	availableSpaces.RemoveAt(index);
 	return space;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour  {
     // configurables
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour  {
     private float ThrowSpeed = 10.0f;
 
     // related objects
+    public GameObject eventSystemGo;
     public Pointer pointerChild;
     public Throwable heldThrowableChild;
 
@@ -42,6 +44,14 @@ public class Player : MonoBehaviour  {
 	bool right = Input.GetKey("d");
 	this.mousePressed = Input.GetMouseButton(0);
 	bool mouseReleased = Input.GetMouseButtonUp(0);
+
+	// temporary scene stuff
+	bool escapePressed = Input.GetKey("escape");
+	if (escapePressed) {
+	    // turn off event system from old scene
+	    GameObject.Destroy(this.eventSystemGo);
+	    SceneManager.LoadScene("StartMenu");
+	}
 
 	// throw held item
 	if (mouseReleased) {

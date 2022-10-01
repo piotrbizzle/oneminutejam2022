@@ -10,7 +10,7 @@ public class Throwable : MonoBehaviour
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
-    private int[] BaseScoreValues = new int[]{50, 250, 200, 100, 50, 10}; // rotten to fresh
+    private int[] BaseScoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
 
     private static Color Green = new Color(16f / 256f, 118f / 256f, 84 / 256f, 1f);
     private static Color DarkGreen = new Color(8f / 256f, 78f / 256f, 49 / 256f, 1f);
