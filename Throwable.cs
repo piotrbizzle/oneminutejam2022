@@ -12,12 +12,12 @@ public class Throwable : MonoBehaviour
     private float MomentumToBreakRatio = 0.6f;
     private int[] BaseScoreValues = new int[]{50, 250, 200, 100, 50, 10}; // rotten to fresh
 
-    private static Color Green = new Color(33f / 256f, 67f / 256f, 7 / 256f, 1f);
-    private static Color DarkGreen = new Color(16f / 256f, 33f / 256f, 3 / 256f, 1f);
+    private static Color Green = new Color(16f / 256f, 118f / 256f, 84 / 256f, 1f);
+    private static Color DarkGreen = new Color(8f / 256f, 78f / 256f, 49 / 256f, 1f);
     private static Color Yellow = new Color(238f / 255f, 186f / 256f, 59 / 256f, 1f);
     private static Color Orange = new Color(221f / 256f, 135f / 256f, 33 / 256f, 1f);
     private static Color Ochre = new Color(135f / 256f, 85f / 256f, 25 / 256f, 1f);
-    private static Color Brown = new Color(51f / 256f, 8f / 256f, 0f, 1f);
+    private static Color Brown = new Color(102f / 256f, 32f / 256f, 0f, 1f);
 
     // related objects
     public Player player;
