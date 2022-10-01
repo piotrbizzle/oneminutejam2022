@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,20 @@ public class Throwable : MonoBehaviour
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
-    private float BaseScoreValue = 100.0f;
+    private int[] BaseScoreValues = new int[]{50, 250, 200, 100, 50, 10}; // rotten to fresh
+
+    private static Color Green = new Color(33f / 256f, 67f / 256f, 7 / 256f, 1f);
+    private static Color DarkGreen = new Color(16f / 256f, 33f / 256f, 3 / 256f, 1f);
+    private static Color Yellow = new Color(238f / 255f, 186f / 256f, 59 / 256f, 1f);
+    private static Color Orange = new Color(221f / 256f, 135f / 256f, 33 / 256f, 1f);
+    private static Color Ochre = new Color(135f / 256f, 85f / 256f, 25 / 256f, 1f);
+    private static Color Brown = new Color(51f / 256f, 8f / 256f, 0f, 1f);
 
     // related objects
     public Player player;
 
-    public float secondsToRot;
-    private float currentRot;
     private float initialMomentum;
+    public float currentRot;
     public float momentum;
     
     public void Start() {
@@ -26,21 +33,28 @@ public class Throwable : MonoBehaviour
 
 	// rendering
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
-
-	// rot
-	this.currentRot = this.secondsToRot;
+	if (this.currentRot < 10f) {
+	    this.GetComponent<SpriteRenderer>().color = Throwable.Ochre;
+	} else if (this.currentRot < 20f) {
+	    this.GetComponent<SpriteRenderer>().color = Throwable.Orange;
+	} else if (this.currentRot < 30f) {
+	    this.GetComponent<SpriteRenderer>().color = Throwable.Yellow;
+	} else if (this.currentRot < 40f) {
+	    this.GetComponent<SpriteRenderer>().color = Throwable.DarkGreen;
+	} else {
+	    this.GetComponent<SpriteRenderer>().color = Throwable.Green;
+	}	
     }
 
     public void Update() {
+	// rendering
+	this.SetColor();
+
 	// rot
 	this.currentRot -= Time.deltaTime;
 	if (this.currentRot < 0) {
 	    this.RotAway();
 	}
-
-	// TODO: go green -> yellow -> orange etc
-	float shade = this.currentRot / this.secondsToRot;
-	this.GetComponent<SpriteRenderer>().color = new Color(shade, shade, shade, 1.0f);
 
 	// check if object thrown
 	if (this.initialMomentum == 0) {
@@ -60,13 +74,44 @@ public class Throwable : MonoBehaviour
 	}
     }
 
+    private void SetColor() {
+	SpriteRenderer sr = this.GetComponent<SpriteRenderer>();
+
+	// determine target color
+	Color targetColor;
+	if (this.currentRot < 10f) {
+	    targetColor = Throwable.Brown;
+	} else if (this.currentRot < 20f) {
+	    targetColor = Throwable.Ochre;
+	} else if (this.currentRot < 30f) {
+	    targetColor = Throwable.Orange;
+	} else if (this.currentRot < 40f) {
+	    targetColor = Throwable.Yellow;
+	} else if (this.currentRot < 50f) {
+	    targetColor = Throwable.DarkGreen;
+	} else {
+	    targetColor = Throwable.Green;
+	}
+
+	// average target and current color to get halfway step
+	Color colorStep = new Color(
+	    ((sr.color.r + targetColor.r) / 2 - sr.color.r) * Time.deltaTime,
+	    ((sr.color.g + targetColor.g) / 2 - sr.color.g) * Time.deltaTime,
+	    ((sr.color.b + targetColor.b) / 2 - sr.color.b) * Time.deltaTime
+	);
+
+	// step toward averaged target color
+	sr.color += colorStep;
+    }
+
     public void Throw(float initialMomentum) {
 	this.initialMomentum = initialMomentum;
 	this.momentum = initialMomentum;
     }
 
     public int GetScoreValue() {
-	return (int)(this.currentRot / this.secondsToRot * this.BaseScoreValue);
+	
+	return this.BaseScoreValues[((int)Math.Floor(this.currentRot / 10.0f))];
     }
     
     private void RotAway() {

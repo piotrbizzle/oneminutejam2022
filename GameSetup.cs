@@ -59,7 +59,7 @@ public class GameSetup : MonoBehaviour
 		// copy properties from prototype
 		pumpkinGo.AddComponent<SpriteRenderer>().sprite = pumpkinPrototype.GetComponent<SpriteRenderer>().sprite;
 		Throwable throwable = pumpkinGo.AddComponent<Throwable>();
-		throwable.secondsToRot = 10.0f * freshness + Random.Range(1, 20) * 0.5f;
+		throwable.currentRot = 10.0f * freshness + Random.Range(1, 20) * 0.5f;
 		throwable.player = this.pumpkinPrototype.player;
 		throwable.enemySprite = this.pumpkinPrototype.enemySprite;
 				
