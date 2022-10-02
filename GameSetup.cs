@@ -54,10 +54,12 @@ public class GameSetup : MonoBehaviour
 	}
 
 	// distribute pumpkins to random spaces
+	Settings.PumpkinsLeft = 0;
 	for (int freshness = 0; freshness < NumberOfPumpkins.Length; freshness++) {
 	    for (int i = 0; i < NumberOfPumpkins[freshness]; i++) {
 		// new pumpkin
 		GameObject pumpkinGo = new GameObject();
+		Settings.PumpkinsLeft += 1;
 
 		// copy properties from prototype
 		pumpkinGo.AddComponent<SpriteRenderer>().sprite = pumpkinPrototype.GetComponent<SpriteRenderer>().sprite;

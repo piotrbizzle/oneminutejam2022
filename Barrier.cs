@@ -12,7 +12,10 @@ public class Barrier : MonoBehaviour
 	rb.gravityScale = 0.0f;
 	rb.constraints = RigidbodyConstraints2D.FreezeAll;
 	rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-	rb.sleepMode = RigidbodySleepMode2D.NeverSleep;        
+	rb.sleepMode = RigidbodySleepMode2D.NeverSleep;
+
+	// rendering
+	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
     }
 
     public void OnTriggerEnter2D(Collider2D collider) {
@@ -24,6 +27,6 @@ public class Barrier : MonoBehaviour
 
     private void GetHitBy(Throwable throwable) {
 	// break throwables that collide
-	GameObject.Destroy(throwable.gameObject);
+	throwable.DestroyPumpkin();
     }
 }

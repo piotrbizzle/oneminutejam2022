@@ -149,6 +149,7 @@ public class Player : MonoBehaviour  {
 	}
 	this.heldThrowableChild.transform.localPosition = new Vector3(0, 0.1f, 0);
 	this.heldThrowableChild.Throw(this.ThrowSpeed * this.meterScale);
+	this.heldThrowableChild.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
 	this.heldThrowableChild.transform.parent = this.transform.parent;
 	this.heldThrowableChild.transform.rotation = this.pointerChild.transform.rotation;
 	this.heldThrowableChild = null;

@@ -36,6 +36,9 @@ public class Enemy : MonoBehaviour
 	this.WalkSpeed += Random.Range(-5, 5) * 0.1f;
 	this.LungeSpeed += Random.Range(-5, 5) * 0.1f;
 	this.WanderSpeed += Random.Range(-5, 5) * 0.05f;
+
+	// rendering
+	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
     }
 
     void Update() {
@@ -83,14 +86,30 @@ public class Enemy : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collider) {
 	Throwable throwable = collider.gameObject.GetComponent<Throwable>();
-	if (throwable != null && throwable.momentum > 0) {
-	    this.GetHitBy(throwable);
+	if (throwable == null) {
+	    return;
 	}
-    }
+	
+	if (throwable.momentum > 0) {
+	    this.GetHitBy(throwable);
+	    return;
+	}
+	
+	// TODO: better way to tell held pumpkin
+	if (throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held") {
+	    this.BreakThrowable(throwable);
+	    return;
+	}
+    }    
 
+    private void BreakThrowable(Throwable throwable) {
+	// destroy throwable
+	throwable.DestroyPumpkin();
+    }
+    
     private void GetHitBy(Throwable throwable) {
 	// destroy enemy and throwable
-	GameObject.Destroy(throwable.gameObject);
+	throwable.DestroyPumpkin();
 	GameObject.Destroy(this.gameObject);
     }
 }

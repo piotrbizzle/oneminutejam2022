@@ -38,7 +38,7 @@ public class Goal : MonoBehaviour
 	Settings.Score = this.score;
 	this.scoreText.text = "$" + this.score;
 
-	GameObject.Destroy(throwable.gameObject);
+	throwable.DestroyPumpkin();
 	return;
     }
 }

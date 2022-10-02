@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Throwable : MonoBehaviour
 {
     public Sprite enemySprite;
-
+    
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
     private int[] BaseScoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
 
+    // colors
     private static Color Green = new Color(16f / 256f, 118f / 256f, 84 / 256f, 1f);
     private static Color DarkGreen = new Color(8f / 256f, 78f / 256f, 49 / 256f, 1f);
     private static Color Yellow = new Color(238f / 255f, 186f / 256f, 59 / 256f, 1f);
@@ -19,12 +21,14 @@ public class Throwable : MonoBehaviour
     private static Color Ochre = new Color(135f / 256f, 85f / 256f, 25 / 256f, 1f);
     private static Color Brown = new Color(102f / 256f, 32f / 256f, 0f, 1f);
 
+    
     // related objects
     public Player player;
 
     private float initialMomentum;
     public float currentRot;
     public float momentum;
+    private bool markedForDestroy;
     
     public void Start() {
  	// collision
@@ -33,6 +37,7 @@ public class Throwable : MonoBehaviour
 
 	// rendering
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
+	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
 	if (this.currentRot < 10f) {
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Ochre;
 	} else if (this.currentRot < 20f) {
@@ -120,8 +125,17 @@ public class Throwable : MonoBehaviour
 	enemyGo.AddComponent<SpriteRenderer>().sprite = this.enemySprite;;
 	enemyGo.AddComponent<Enemy>().player = this.player;
 	enemyGo.transform.position = this.transform.position;
-	
+
 	// delete the throwable
+	this.DestroyPumpkin();
+    }
+
+    public void DestroyPumpkin() {
+	if (this.markedForDestroy) {
+	    return;
+	}
+	Settings.PumpkinsLeft -= 1;
 	GameObject.Destroy(this.gameObject);
+	this.markedForDestroy = true;
     }
 }

@@ -6,10 +6,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartButton : MonoBehaviour {
-    public GameObject eventSystemGo;
-
-    // TODO: move to separate class
     public Text seedInput;
+    public DimmerDown dimmer;
     
     public void Start() {
 	Button button = this.GetComponent<Button>();
@@ -26,8 +24,7 @@ public class StartButton : MonoBehaviour {
 	    Settings.SeedString = this.seedInput.text;
 	}
 	
-	// turn off event system from old scene
-	GameObject.Destroy(this.eventSystemGo);
-	SceneManager.LoadScene("GameplayScene");
+	// activate dimmer
+	this.dimmer.StartDim();
     }
 }
