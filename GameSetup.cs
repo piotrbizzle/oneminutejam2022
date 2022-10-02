@@ -62,12 +62,15 @@ public class GameSetup : MonoBehaviour
 		Settings.PumpkinsLeft += 1;
 
 		// copy properties from prototype
+		// TODO: use prefabs next time
 		pumpkinGo.AddComponent<SpriteRenderer>().sprite = pumpkinPrototype.GetComponent<SpriteRenderer>().sprite;
 		Throwable throwable = pumpkinGo.AddComponent<Throwable>();
 		throwable.currentRot = 10.0f * freshness + UnityEngine.Random.Range(1, 20) * 0.5f;
 		throwable.player = this.pumpkinPrototype.player;
 		throwable.enemySprite = this.pumpkinPrototype.enemySprite;
-				
+		throwable.sprites = this.pumpkinPrototype.sprites;
+		throwable.particles = this.pumpkinPrototype.particles;
+		
 		// place randomly on available space
 		pumpkinGo.transform.position = GameSetup.GridPointToWorldPoint(GameSetup.PopRandomSpace(availableSpaces));
 		pumpkinGo.transform.Translate(

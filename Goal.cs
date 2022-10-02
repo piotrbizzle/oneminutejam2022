@@ -5,9 +5,15 @@ using UnityEngine.UI;
 
 public class Goal : MonoBehaviour
 {
+    // related objects
+    public Light goalLight;
+    
     // placeholder
     public Text scoreText;
     private int score;
+
+    private int[] scoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
+    private float[] scoreLightIntensities = new float[]{2f, 3f, 5f, 3, 2f, 1.5f}; // rotten to fresh
     
     // Start is called before the first frame update
     public void Start() {
@@ -34,11 +40,13 @@ public class Goal : MonoBehaviour
     }
 
     private void ScoreThrowable(Throwable throwable) {
-	this.score += throwable.GetScoreValue();
+	int scoreBucket = throwable.GetScoreBucket();
+	this.score += this.scoreValues[scoreBucket];
 	Settings.Score = this.score;
 	this.scoreText.text = "$" + this.score;
-
-	throwable.DestroyPumpkin();
-	return;
+	
+	this.goalLight.intensity = this.scoreLightIntensities[scoreBucket];
+	
+	throwable.DestroyPumpkin(false); // break but don't explode	
     }
 }

@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class Throwable : MonoBehaviour
 {
+    public Sprite[] sprites = new Sprite[6];
     public Sprite enemySprite;
     
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
-    private int[] BaseScoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
 
     // colors
     private static Color Green = new Color(16f / 256f, 118f / 256f, 84 / 256f, 1f);
@@ -25,6 +25,9 @@ public class Throwable : MonoBehaviour
     // related objects
     public Player player;
 
+    // related prefabs
+    public ParticleSystem particles;
+    
     private float initialMomentum;
     public float currentRot;
     public float momentum;
@@ -39,16 +42,24 @@ public class Throwable : MonoBehaviour
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
 	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
 	if (this.currentRot < 10f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[0];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Ochre;
 	} else if (this.currentRot < 20f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[1];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Orange;
 	} else if (this.currentRot < 30f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[2];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Yellow;
 	} else if (this.currentRot < 40f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[3];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.DarkGreen;
-	} else {
+	} else if (this.currentRot < 50f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[4];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Green;
-	}	
+	} else {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[5];
+	    this.GetComponent<SpriteRenderer>().color = Throwable.Green;
+	}
     }
 
     public void Update() {
@@ -85,16 +96,22 @@ public class Throwable : MonoBehaviour
 	// determine target color
 	Color targetColor;
 	if (this.currentRot < 10f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[0];
 	    targetColor = Throwable.Brown;
 	} else if (this.currentRot < 20f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[1];
 	    targetColor = Throwable.Ochre;
 	} else if (this.currentRot < 30f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[2];
 	    targetColor = Throwable.Orange;
 	} else if (this.currentRot < 40f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[3];
 	    targetColor = Throwable.Yellow;
 	} else if (this.currentRot < 50f) {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[4];
 	    targetColor = Throwable.DarkGreen;
 	} else {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[5];
 	    targetColor = Throwable.Green;
 	}
 
@@ -114,9 +131,8 @@ public class Throwable : MonoBehaviour
 	this.momentum = initialMomentum;
     }
 
-    public int GetScoreValue() {
-	
-	return this.BaseScoreValues[((int)Math.Floor(this.currentRot / 10.0f))];
+    public int GetScoreBucket() {       
+	return ((int)Math.Floor(this.currentRot / 10.0f));
     }
     
     private void RotAway() {
@@ -130,12 +146,22 @@ public class Throwable : MonoBehaviour
 	this.DestroyPumpkin();
     }
 
-    public void DestroyPumpkin() {
+    public void DestroyPumpkin(bool doExplode=true) {
 	if (this.markedForDestroy) {
 	    return;
 	}
+	this.markedForDestroy = true;	
 	Settings.PumpkinsLeft -= 1;
 	GameObject.Destroy(this.gameObject);
-	this.markedForDestroy = true;
+
+	// particles
+	if (doExplode) {
+	    ParticleSystem particles = Instantiate(this.particles) as ParticleSystem;	
+	    particles.transform.position = this.transform.position;	    
+
+	    // this has to be done in two lines for arcane reasons
+	    var main = particles.main;
+	    main.startColor = this.GetComponent<SpriteRenderer>().color;
+	}
     }
 }
