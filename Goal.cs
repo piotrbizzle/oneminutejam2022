@@ -35,6 +35,7 @@ public class Goal : MonoBehaviour
 
     private void ScoreThrowable(Throwable throwable) {
 	this.score += throwable.GetScoreValue();
+	Settings.Score = this.score;
 	this.scoreText.text = "$" + this.score;
 
 	GameObject.Destroy(throwable.gameObject);
