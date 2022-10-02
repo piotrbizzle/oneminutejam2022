@@ -50,7 +50,7 @@ public class Player : MonoBehaviour  {
 	if (escapePressed) {
 	    // turn off event system from old scene
 	    GameObject.Destroy(this.eventSystemGo);
-	    SceneManager.LoadScene("StartMenu");
+	    SceneManager.LoadScene("EndMenu");
 	}
 
 	// throw held item

@@ -21,12 +21,10 @@ public class GameSetup : MonoBehaviour
     public void Start()
     {
 	// init randomizer
-
-	// if (seedString == "") {
-	// UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
-	// } else {
-	// UnityEngine.Random.InitState(seedString.GetHashCode());
-	//}
+	if (Settings.SeedString == "") {
+	    Settings.SeedString = ((int)DateTime.Now.Ticks).ToString();
+	}
+	UnityEngine.Random.InitState(Settings.SeedString.GetHashCode());
 	
 	// make a list of all allowed spaces for objects on a grid
 	// grid origin in bottom left
