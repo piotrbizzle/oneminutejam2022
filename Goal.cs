@@ -12,6 +12,7 @@ public class Goal : MonoBehaviour
     public Text scoreText;
     private int score;
 
+    public Sprite[] scorePlusEffectSprites = new Sprite[6];
     private int[] scoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
     private float[] scoreParticleIntensities = new float[]{2f, 3f, 5f, 3f, 2f, 1.5f}; // rotten to fresh
     
@@ -45,10 +46,17 @@ public class Goal : MonoBehaviour
 	Settings.Score = this.score;
 	this.scoreText.text = "$" + this.score;
 
+	// score plus effect
+	GameObject scorePlusGo = new GameObject();
+	scorePlusGo.AddComponent<SpriteRenderer>().sprite = this.scorePlusEffectSprites[scoreBucket];
+	scorePlusGo.AddComponent<ScorePlusText>();
+	scorePlusGo.transform.position = this.transform.position;
+	
 	// particles
+	/*
 	ParticleSystem particles = Instantiate(this.particles) as ParticleSystem;	
 	particles.transform.position = this.transform.position;	    
-
+	*/
 	// this has to be done in two lines for arcane reasons
 	var main = particles.main;
 	main.startLifetime = 0.1f * this.scoreParticleIntensities[scoreBucket];
