@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class Goal : MonoBehaviour
 {
-    // related objects
-    public Light goalLight;
-
     // related prefabs
     public ParticleSystem particles;
     
@@ -16,7 +13,7 @@ public class Goal : MonoBehaviour
     private int score;
 
     private int[] scoreValues = new int[]{50, 100, 250, 100, 50, 10}; // rotten to fresh
-    private float[] scoreLightIntensities = new float[]{2f, 2.5f, 3f, 2.5f, 2f, 1.5f}; // rotten to fresh
+    private float[] scoreParticleIntensities = new float[]{2f, 3f, 5f, 3f, 2f, 1.5f}; // rotten to fresh
     
     // Start is called before the first frame update
     public void Start() {
@@ -48,15 +45,14 @@ public class Goal : MonoBehaviour
 	Settings.Score = this.score;
 	this.scoreText.text = "$" + this.score;
 
-	// visual effects
-	this.goalLight.intensity = this.scoreLightIntensities[scoreBucket];
+	// particles
 	ParticleSystem particles = Instantiate(this.particles) as ParticleSystem;	
 	particles.transform.position = this.transform.position;	    
 
 	// this has to be done in two lines for arcane reasons
 	var main = particles.main;
-	main.startLifetime = 0.1f * this.scoreLightIntensities[scoreBucket];
-	main.startSpeed = this.scoreLightIntensities[scoreBucket];
+	main.startLifetime = 0.1f * this.scoreParticleIntensities[scoreBucket];
+	main.startSpeed = this.scoreParticleIntensities[scoreBucket];
 	main.startColor = throwable.GetComponent<SpriteRenderer>().color;
 	
 	throwable.DestroyPumpkin(false); // break but don't explode	
