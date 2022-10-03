@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Throwable : MonoBehaviour
 {
     public Sprite[] sprites = new Sprite[6];
-    public Sprite[] enemySprites = new Sprite[2];
+    public Sprite[] enemySprites = new Sprite[5];
     public Light enemyLight;
     
     // configurables

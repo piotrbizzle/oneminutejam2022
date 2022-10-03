@@ -6,6 +6,6 @@ using UnityEngine.UI;
 public class EndText : MonoBehaviour
 {
     void Start() {
-        this.GetComponent<Text>().text = "You got $" + Settings.Score + " points on seed " + Settings.SeedString;
+        this.GetComponent<Text>().text = "You harvested " + Settings.PumpkinsScored + " pumpkins worth $" + Settings.Score + " altogether on seed '" + Settings.SeedString + "'";
     }
 }
