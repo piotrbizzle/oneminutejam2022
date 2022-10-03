@@ -48,7 +48,8 @@ public class Enemy : MonoBehaviour
 
     void Update() {
 	// delete light if needed. this will doubtless be a source of bugs later
-	if (this.heldThrowableChild == null && this.transform.childCount > 0) {
+	if (this.transform.childCount == 1) {
+	    this.heldThrowableChild = null;
 	    GameObject.Destroy(this.transform.GetChild(0).gameObject);
 	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[0];
 	}
@@ -110,7 +111,7 @@ public class Enemy : MonoBehaviour
 	}
 	
 	// TODO: better way to tell held pumpkin
-	if (this.heldThrowableChild == null && throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held" && throwable.transform.parent.parent == this.player.transform) {
+	if (this.heldThrowableChild == null && throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held" && throwable.transform.parent.parent == this.player.transform && throwable.IsStealable()) {
 	    this.StealThrowable(throwable);
 	    return;
 	}
@@ -118,6 +119,7 @@ public class Enemy : MonoBehaviour
 
     private void StealThrowable(Throwable throwable) {
 	// swap ownership of throwable
+	throwable.GetStolen();
 	this.heldThrowableChild = throwable;
 	this.player.heldThrowableChild = null;
 	throwable.gameObject.transform.parent = this.transform;

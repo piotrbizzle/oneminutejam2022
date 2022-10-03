@@ -18,11 +18,19 @@ public class Player : MonoBehaviour  {
     public Pointer pointerChild;
     public Throwable heldThrowableChild;
 
+    // animation
+    public Sprite[] sprites = new Sprite[3];
+    public float walkAnimationBurdenedDelay = 0.2f;    
+    public float walkAnimationDelay = 0.1f;
+    public float currentWalkAnimationDelay = 0;
+    public int currentWalkAnimationFrame = 1;
+    
     // controls and movement
     private float xMomentum;
     private float yMomentum;
     private float meterScale = 0.0f;
 
+    private bool mouseClicked;
     private bool mousePressed;
 
     public void Start() {
@@ -43,6 +51,7 @@ public class Player : MonoBehaviour  {
 	bool left = Input.GetKey("a");
 	bool right = Input.GetKey("d");
 	this.mousePressed = Input.GetMouseButton(0);
+	this.mouseClicked = Input.GetMouseButtonDown(0);
 	bool mouseReleased = Input.GetMouseButtonUp(0);
 
 	// temporary scene stuff
@@ -119,6 +128,20 @@ public class Player : MonoBehaviour  {
 	// apply momentum
 	this.transform.Translate(Vector3.up * Time.deltaTime * this.yMomentum);
 	this.transform.Translate(Vector3.left * Time.deltaTime * this.xMomentum);
+	// animation
+	if (this.xMomentum != 0 || this.yMomentum != 0) {
+	    if (this.currentWalkAnimationDelay <= 0) {
+		this.currentWalkAnimationDelay = this.heldThrowableChild == null ? this.walkAnimationDelay : this.walkAnimationBurdenedDelay;
+		// this only works for exactly 2 frames
+		this.currentWalkAnimationFrame = this.currentWalkAnimationFrame % 2 + 1;
+	    } else {
+		this.currentWalkAnimationDelay -= Time.deltaTime;
+	    }
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[this.currentWalkAnimationFrame];
+	} else {
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[0];
+	}
+	
     }
 
     public void OnTriggerStay2D(Collider2D collider) {
@@ -131,10 +154,18 @@ public class Player : MonoBehaviour  {
 
     private void PickUp(Throwable throwable) {
 	// hold at most one throwable at a time
-	// TODO: better way to tell held pumpkin
-	if (this.heldThrowableChild != null || throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held") {
+	if (this.heldThrowableChild != null) {
 	    return;
 	}
+
+	// don't steal pumpkin back before cooldown is up
+	// TODO: better way to tell held pumpkin
+	if (throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held" && !throwable.IsStealable()) {
+	    return;
+	} else {
+	    throwable.GetStolen();
+	}
+	    
 	
 	// pick up item
 	throwable.gameObject.transform.parent = this.pointerChild.transform;

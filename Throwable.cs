@@ -13,7 +13,8 @@ public class Throwable : MonoBehaviour
     // configurables
     private float Drag = 10.0f;
     private float MomentumToBreakRatio = 0.6f;
-
+    private float StealableCooldown = 0.2f;
+    
     // colors
     private static Color Green = new Color(16f / 256f, 118f / 256f, 84 / 256f, 1f);
     private static Color DarkGreen = new Color(8f / 256f, 78f / 256f, 49 / 256f, 1f);
@@ -31,6 +32,7 @@ public class Throwable : MonoBehaviour
     
     private float initialMomentum;
     public float currentRot;
+    private float currentStealableCooldown;
     public float momentum;
     private bool markedForDestroy;
     
@@ -61,6 +63,9 @@ public class Throwable : MonoBehaviour
 	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[5];
 	    this.GetComponent<SpriteRenderer>().color = Throwable.Green;
 	}
+
+	// cooldowns
+	this.currentStealableCooldown = this.StealableCooldown;
     }
 
     public void Update() {
@@ -71,6 +76,12 @@ public class Throwable : MonoBehaviour
 	this.currentRot -= Time.deltaTime;
 	if (this.currentRot < 0) {
 	    this.RotAway();
+	}
+
+	// cooldowns
+	this.currentStealableCooldown -= Time.deltaTime;
+	if (this.currentStealableCooldown < 0) {
+	    this.currentStealableCooldown = 0;
 	}
 
 	// check if object thrown
@@ -134,6 +145,14 @@ public class Throwable : MonoBehaviour
 
     public int GetScoreBucket() {       
 	return ((int)Math.Floor(this.currentRot / 10.0f));
+    }
+
+    public void GetStolen() {
+	this.currentStealableCooldown = this.StealableCooldown;
+    }
+
+    public bool IsStealable() {
+	return this.currentStealableCooldown <= 0;
     }
     
     private void RotAway() {
