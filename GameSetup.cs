@@ -67,9 +67,10 @@ public class GameSetup : MonoBehaviour
 		Throwable throwable = pumpkinGo.AddComponent<Throwable>();
 		throwable.currentRot = 10.0f * freshness + UnityEngine.Random.Range(1, 20) * 0.5f;
 		throwable.player = this.pumpkinPrototype.player;
-		throwable.enemySprite = this.pumpkinPrototype.enemySprite;
+		throwable.enemySprites = this.pumpkinPrototype.enemySprites;
 		throwable.sprites = this.pumpkinPrototype.sprites;
 		throwable.particles = this.pumpkinPrototype.particles;
+		throwable.enemyLight = this.pumpkinPrototype.enemyLight;
 		
 		// place randomly on available space
 		pumpkinGo.transform.position = GameSetup.GridPointToWorldPoint(GameSetup.PopRandomSpace(availableSpaces));

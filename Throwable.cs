@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class Throwable : MonoBehaviour
 {
     public Sprite[] sprites = new Sprite[6];
-    public Sprite enemySprite;
+    public Sprite[] enemySprites = new Sprite[2];
+    public Light enemyLight;
     
     // configurables
     private float Drag = 10.0f;
@@ -138,8 +139,9 @@ public class Throwable : MonoBehaviour
     private void RotAway() {
 	// spawn an enemy
 	GameObject enemyGo = new GameObject();
-	enemyGo.AddComponent<SpriteRenderer>().sprite = this.enemySprite;;
 	enemyGo.AddComponent<Enemy>().player = this.player;
+	enemyGo.GetComponent<Enemy>().sprites = this.enemySprites;
+	enemyGo.GetComponent<Enemy>().possessedLight = this.enemyLight;
 	enemyGo.transform.position = this.transform.position;
 
 	// delete the throwable

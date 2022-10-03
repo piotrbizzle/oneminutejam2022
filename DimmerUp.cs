@@ -29,6 +29,6 @@ public class DimmerUp : MonoBehaviour
 	
 	if (this.secondsRemaining < 0) {
 	    GameObject.Destroy(this.gameObject);
-	}	
+	}
     }
 }

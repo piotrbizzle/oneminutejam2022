@@ -131,7 +131,8 @@ public class Player : MonoBehaviour  {
 
     private void PickUp(Throwable throwable) {
 	// hold at most one throwable at a time
-	if (this.heldThrowableChild != null) {
+	// TODO: better way to tell held pumpkin
+	if (this.heldThrowableChild != null || throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held") {
 	    return;
 	}
 	

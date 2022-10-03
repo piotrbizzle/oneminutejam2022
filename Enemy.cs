@@ -16,14 +16,22 @@ public class Enemy : MonoBehaviour
     
     // related objects
     public Player player;
-
+    public Throwable heldThrowableChild;
+    public Light possessedLight;
+    
     // movement
     private float currentLungeCooldown;
     private float currentLungeDuration;
     private Vector3 wanderVector;
     private float currentWanderDuration;
 
-    void Start() {	
+    public Sprite[] sprites = new Sprite[2];
+    
+    void Start() {
+	// rendering
+	this.gameObject.AddComponent<SpriteRenderer>().sprite = this.sprites[0];
+	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
+	
 	// collision
         this.gameObject.AddComponent<BoxCollider2D>();
 
@@ -36,24 +44,30 @@ public class Enemy : MonoBehaviour
 	this.WalkSpeed += Random.Range(-5, 5) * 0.1f;
 	this.LungeSpeed += Random.Range(-5, 5) * 0.1f;
 	this.WanderSpeed += Random.Range(-5, 5) * 0.05f;
-
-	// rendering
-	this.GetComponent<SpriteRenderer>().material = Settings.SpriteMaterial;
     }
 
     void Update() {
+	// delete light if needed. this will doubtless be a source of bugs later
+	if (this.heldThrowableChild == null && this.transform.childCount > 0) {
+	    GameObject.Destroy(this.transform.GetChild(0).gameObject);
+	    this.GetComponent<SpriteRenderer>().sprite = this.sprites[0];
+	}
+	
 	// do nothing if lunge on cooldown
 	if (this.currentLungeCooldown > 0) {
 	    this.currentLungeCooldown -= Time.deltaTime;
 	    return;
 	}
 
+	// invert all moves if holding a pumpkin
+	float chaseOrFleeModifier = this.heldThrowableChild == null ? 1 : -1;
+	
 	Vector3 normalizedToPlayer = Vector3.Normalize(this.player.transform.position - this.transform.position);
 
 	// move fast if mid-lunge
 	// TODO: ease in and out
 	if (this.currentLungeDuration > 0) {
-	    this.transform.Translate(normalizedToPlayer * this.LungeSpeed * Time.deltaTime);
+	    this.transform.Translate(normalizedToPlayer * this.LungeSpeed * Time.deltaTime * chaseOrFleeModifier);
 	    this.currentLungeDuration -= Time.deltaTime;
 
 	    // go to cooldown if lunge ends
@@ -70,7 +84,7 @@ public class Enemy : MonoBehaviour
 	    this.currentLungeDuration = this.LungeDuration;
 	} else if (distanceToPlayer < this.WalkAggroDistance) {
 	    // maybe move normal speed toward player
-	    this.transform.Translate(normalizedToPlayer * this.WalkSpeed * Time.deltaTime);	
+	    this.transform.Translate(normalizedToPlayer * this.WalkSpeed * Time.deltaTime * chaseOrFleeModifier);
 	} else {
 	    // enemy wanders
 	    if (this.currentWanderDuration < 0) {
@@ -96,20 +110,38 @@ public class Enemy : MonoBehaviour
 	}
 	
 	// TODO: better way to tell held pumpkin
-	if (throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held") {
-	    this.BreakThrowable(throwable);
+	if (this.heldThrowableChild == null && throwable.GetComponent<SpriteRenderer>().sortingLayerName == "Held" && throwable.transform.parent.parent == this.player.transform) {
+	    this.StealThrowable(throwable);
 	    return;
 	}
     }    
 
-    private void BreakThrowable(Throwable throwable) {
-	// destroy throwable
-	throwable.DestroyPumpkin();
+    private void StealThrowable(Throwable throwable) {
+	// swap ownership of throwable
+	this.heldThrowableChild = throwable;
+	this.player.heldThrowableChild = null;
+	throwable.gameObject.transform.parent = this.transform;
+
+	// center
+	throwable.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+
+	// render light
+	this.GetComponent<SpriteRenderer>().sprite = this.sprites[1];
+	Light possessedLightGo = Instantiate(this.possessedLight) as Light;
+	possessedLightGo.gameObject.transform.parent = this.transform;
+	possessedLightGo.gameObject.transform.localPosition = new Vector3(0, 0, -0.5f);
     }
     
     private void GetHitBy(Throwable throwable) {
+	// drop held throwable
+	if (this.heldThrowableChild != null) {
+	    this.heldThrowableChild.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
+	    this.heldThrowableChild.transform.parent = this.transform.parent;
+	    this.heldThrowableChild = null;
+	}
+
 	// destroy enemy and throwable
 	throwable.DestroyPumpkin();
-	GameObject.Destroy(this.gameObject);
+	GameObject.Destroy(this.gameObject);	
     }
 }
