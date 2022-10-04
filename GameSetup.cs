@@ -71,6 +71,7 @@ public class GameSetup : MonoBehaviour
 		throwable.sprites = this.pumpkinPrototype.sprites;
 		throwable.particles = this.pumpkinPrototype.particles;
 		throwable.enemyLight = this.pumpkinPrototype.enemyLight;
+		throwable.enemyScorePlusEffectSprite = this.pumpkinPrototype.enemyScorePlusEffectSprite;
 		
 		// place randomly on available space
 		pumpkinGo.transform.position = GameSetup.GridPointToWorldPoint(GameSetup.PopRandomSpace(availableSpaces));

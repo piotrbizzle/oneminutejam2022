@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     private float WalkAggroDistance = 4.0f;
     private float WanderSpeed = 0.35f;
     private float WanderDuration = 0.5f;
+    private int ScoreValue = 10;
     
     // related objects
     public Player player;
@@ -23,6 +24,7 @@ public class Enemy : MonoBehaviour
     public float walkAnimationDelay = 0.2f;
     public float currentWalkAnimationDelay = 0;
     public int currentWalkAnimationFrame = 1;
+    public Sprite scorePlusEffectSprite;
     
     // movement
     private float currentLungeCooldown;
@@ -165,6 +167,16 @@ public class Enemy : MonoBehaviour
 	    this.heldThrowableChild = null;
 	}
 
+	// score plus effect
+	GameObject scorePlusGo = new GameObject();
+	scorePlusGo.AddComponent<SpriteRenderer>().sprite = this.scorePlusEffectSprite;
+	scorePlusGo.AddComponent<ScorePlusText>();
+	scorePlusGo.transform.position = this.transform.position;
+
+	// scoring
+	Settings.Score += this.ScoreValue;
+	Settings.EnemiesKilled += 1;	
+	
 	// destroy enemy and throwable
 	throwable.DestroyPumpkin();
 	GameObject.Destroy(this.gameObject);	

@@ -8,6 +8,7 @@ public class Throwable : MonoBehaviour
 {
     public Sprite[] sprites = new Sprite[6];
     public Sprite[] enemySprites = new Sprite[5];
+    public Sprite enemyScorePlusEffectSprite;
     public Light enemyLight;
     
     // configurables
@@ -161,6 +162,7 @@ public class Throwable : MonoBehaviour
 	enemyGo.AddComponent<Enemy>().player = this.player;
 	enemyGo.GetComponent<Enemy>().sprites = this.enemySprites;
 	enemyGo.GetComponent<Enemy>().possessedLight = this.enemyLight;
+	enemyGo.GetComponent<Enemy>().scorePlusEffectSprite = this.enemyScorePlusEffectSprite;
 	enemyGo.transform.position = this.transform.position;
 
 	// delete the throwable

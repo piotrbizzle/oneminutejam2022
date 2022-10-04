@@ -8,4 +8,5 @@ public class Settings {
     public static int PumpkinsScored = 0;
     public static Material SpriteMaterial = Resources.Load<Material>("SpritesDiffuse");
     public static int PumpkinsLeft = 0;
+    public static int EnemiesKilled = 0;
 }
