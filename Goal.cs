@@ -9,7 +9,7 @@ public class Goal : MonoBehaviour
     public Text scoreText;
 
     public Sprite[] scorePlusEffectSprites = new Sprite[6];
-    private int[] scoreValues = new int[]{50, 100, 250, 50, 10, 10}; // rotten to fresh
+    private int[] scoreValues = new int[]{50, 100, 250, 100, 10, 10}; // rotten to fresh
     private float[] scoreParticleIntensities = new float[]{2f, 3f, 5f, 2f, 2f, 1.5f}; // rotten to fresh
     
     // Start is called before the first frame update

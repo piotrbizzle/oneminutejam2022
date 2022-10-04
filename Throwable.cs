@@ -145,7 +145,13 @@ public class Throwable : MonoBehaviour
     }
 
     public int GetScoreBucket() {       
-	return ((int)Math.Floor(this.currentRot / 10.0f));
+       if (this.currentRot >= 63f) {
+           return 5;
+       } else if (this.currentRot < 7f) {
+           return 0;
+       } else {
+           return ((int)Math.Floor((this.currentRot + 3f) / 10f));
+       }
     }
 
     public void GetStolen() {
