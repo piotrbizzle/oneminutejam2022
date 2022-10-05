@@ -24,6 +24,6 @@ public class DimmingLight : MonoBehaviour
 
 	float timeRatio = (60f - this.timeRemaining) / 60f;
 	light.transform.localPosition = new Vector3(0, 0, -5 + timeRatio * 4.5f);
-	light.range = 40f - timeRatio * 36f;
+	light.range = 40f - timeRatio * 20f;
     }
 }

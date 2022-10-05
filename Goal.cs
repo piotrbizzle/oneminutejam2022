@@ -8,9 +8,13 @@ public class Goal : MonoBehaviour
     // placeholder
     public Text scoreText;
 
+    public AudioClip[] scoreClips = new AudioClip[6];
     public Sprite[] scorePlusEffectSprites = new Sprite[6];
     private int[] scoreValues = new int[]{50, 100, 250, 50, 10, 10}; // rotten to fresh
     private float[] scoreParticleIntensities = new float[]{2f, 3f, 5f, 2f, 2f, 1.5f}; // rotten to fresh
+
+    // related objects
+    public Player player;
     
     // Start is called before the first frame update
     public void Start() {
@@ -26,6 +30,9 @@ public class Goal : MonoBehaviour
 	this.GetComponent<SpriteRenderer>().sortingLayerName = "Scenery";
 
 	// score
+	Settings.DistanceTravelled = 0;
+	Settings.PumpkinsSmashedOnBarriers = 0;
+	Settings.PlayerDidAnything = false;
 	Settings.EnemiesKilled = 0;
 	Settings.Score = 0;
 	Settings.PumpkinsScored = 0;
@@ -48,6 +55,13 @@ public class Goal : MonoBehaviour
 	Settings.Score += this.scoreValues[scoreBucket];
 	Settings.PumpkinsScored += 1;
 
+	// sound
+	GameObject soundEffectGo = new GameObject();	    
+	SoundEffect soundEffect = soundEffectGo.AddComponent<SoundEffect>();
+	soundEffect.clip = this.scoreClips[scoreBucket];
+	soundEffect.distance = Vector3.Distance(this.transform.position, player.transform.position);
+
+	
 	// score plus effect
 	GameObject scorePlusGo = new GameObject();
 	scorePlusGo.AddComponent<SpriteRenderer>().sprite = this.scorePlusEffectSprites[scoreBucket];

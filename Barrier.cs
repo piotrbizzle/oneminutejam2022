@@ -27,6 +27,9 @@ public class Barrier : MonoBehaviour
 
     private void GetHitBy(Throwable throwable) {
 	// break throwables that collide
+	if (!throwable.markedForDestroy) {
+	    Settings.PumpkinsSmashedOnBarriers += 1;
+	}
 	throwable.DestroyPumpkin();
     }
 }

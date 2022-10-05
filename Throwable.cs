@@ -10,6 +10,7 @@ public class Throwable : MonoBehaviour
     public Sprite[] enemySprites = new Sprite[5];
     public Sprite enemyScorePlusEffectSprite;
     public Light enemyLight;
+    public AudioClip enemyClip;
     
     // configurables
     private float Drag = 10.0f;
@@ -30,12 +31,13 @@ public class Throwable : MonoBehaviour
 
     // related prefabs
     public ParticleSystem particles;
+    public AudioClip clip;
     
     private float initialMomentum;
     public float currentRot;
     private float currentStealableCooldown;
     public float momentum;
-    private bool markedForDestroy;
+    public bool markedForDestroy;
     
     public void Start() {
  	// collision
@@ -169,6 +171,7 @@ public class Throwable : MonoBehaviour
 	enemyGo.GetComponent<Enemy>().sprites = this.enemySprites;
 	enemyGo.GetComponent<Enemy>().possessedLight = this.enemyLight;
 	enemyGo.GetComponent<Enemy>().scorePlusEffectSprite = this.enemyScorePlusEffectSprite;
+	enemyGo.GetComponent<Enemy>().clip = this.enemyClip;
 	enemyGo.transform.position = this.transform.position;
 
 	// delete the throwable
@@ -183,8 +186,16 @@ public class Throwable : MonoBehaviour
 	Settings.PumpkinsLeft -= 1;
 	GameObject.Destroy(this.gameObject);
 
-	// particles
+
+	// sound and particles
 	if (doExplode) {
+	    // sound
+	    GameObject soundEffectGo = new GameObject();	    
+	    SoundEffect soundEffect = soundEffectGo.AddComponent<SoundEffect>();
+	    soundEffect.clip = this.clip;
+	    soundEffect.distance = Vector3.Distance(this.transform.position, player.transform.position);
+
+	    // particles
 	    ParticleSystem particles = Instantiate(this.particles) as ParticleSystem;	
 	    particles.transform.position = this.transform.position;	    
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,6 @@ public class EndScoreText : MonoBehaviour
 {
     void Start()
     {
-	this.GetComponent<Text>().text = "Total Score: $" + Settings.Score + "\nPumpkins Collected: " + Settings.PumpkinsScored + "\nEnemies Destroyed: " + Settings.EnemiesKilled + "\nSeed: '" + Settings.SeedString + "'";
+	this.GetComponent<Text>().text = "Total Score: $" + Settings.Score + "\nPumpkins Collected: " + Settings.PumpkinsScored + "\nEnemies Destroyed: " + Settings.EnemiesKilled + "\nPumpkins Splatted on Fences: " + Settings.PumpkinsSmashedOnBarriers + "\nMeters Travelled: " + Math.Round(Settings.DistanceTravelled * 5f) + "\nSeed: '" + Settings.SeedString + "'";
     }
 }

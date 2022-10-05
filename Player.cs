@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour  {
     // configurables
-    public float RunSpeed = 3.5f;
-    public float WalkSpeed = 2.5f;
-    public float Drag = 15.0f;
-    public float StartingCharge = 0.2f;
-    public float ChargeSpeed = 1.0f;
-    public float ThrowSpeed = 10.0f;
+    private float RunSpeed = 3.5f;
+    private float WalkSpeed = 2f;
+    private float Drag = 15.0f;
+    private float StartingCharge = 0.2f;
+    private float ChargeSpeed = 1.0f;
+    private float ThrowSpeed = 10.0f;
 
     // related objects
     public GameObject eventSystemGo;
@@ -53,9 +53,14 @@ public class Player : MonoBehaviour  {
 	this.mousePressed = Input.GetMouseButton(0);
 	this.mouseClicked = Input.GetMouseButtonDown(0);
 	bool mouseReleased = Input.GetMouseButtonUp(0);
-
-	// temporary scene stuff
 	bool escapePressed = Input.GetKey("escape");
+
+	// do nothing ending
+	if (!Settings.PlayerDidAnything && (up || down || left || right || this.mousePressed || this.mouseClicked || escapePressed)) {
+	    Settings.PlayerDidAnything = true;
+	}	
+	
+	// exit game early
 	if (escapePressed) {
 	    // turn off event system from old scene
 	    GameObject.Destroy(this.eventSystemGo);
@@ -126,8 +131,24 @@ public class Player : MonoBehaviour  {
 	}
 	
 	// apply momentum
+	Vector3 previousPosition = this.transform.position;
 	this.transform.Translate(Vector3.up * Time.deltaTime * this.yMomentum);
 	this.transform.Translate(Vector3.left * Time.deltaTime * this.xMomentum);
+	if (this.transform.position.x < -4.7f) {
+	    this.transform.position = new Vector3(-4.7f, this.transform.position.y, 0);
+	}
+	if (this.transform.position.x > 4.7f) {
+	    this.transform.position = new Vector3(4.7f, this.transform.position.y, 0);
+	}
+	if (this.transform.position.y < -4.6f) {
+	    this.transform.position = new Vector3(this.transform.position.x, -4.6f, 0);
+	}
+	if (this.transform.position.y > 4.6f) {
+	    this.transform.position = new Vector3(this.transform.position.x, 4.6f, 0);
+	}
+	Settings.DistanceTravelled += Vector3.Distance(previousPosition, this.transform.position);
+	
+
 	// animation
 	if (this.xMomentum != 0 || this.yMomentum != 0) {
 	    if (this.currentWalkAnimationDelay <= 0) {

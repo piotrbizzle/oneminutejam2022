@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
     public float currentWalkAnimationDelay = 0;
     public int currentWalkAnimationFrame = 1;
     public Sprite scorePlusEffectSprite;
+
+    public AudioClip clip;
     
     // movement
     private float currentLungeCooldown;
@@ -146,6 +148,12 @@ public class Enemy : MonoBehaviour
     }    
 
     private void StealThrowable(Throwable throwable) {
+	// sound
+	GameObject soundEffectGo = new GameObject();	    
+	SoundEffect soundEffect = soundEffectGo.AddComponent<SoundEffect>();
+	soundEffect.clip = this.clip;
+	soundEffect.distance = Vector3.Distance(this.transform.position, player.transform.position);
+
 	// swap ownership of throwable
 	throwable.GetStolen();
 	this.heldThrowableChild = throwable;
