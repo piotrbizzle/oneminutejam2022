@@ -63,7 +63,7 @@ public class EndText : MonoBehaviour
 	// pumpkin smasher ending
 	if (Settings.PumpkinsSmashedOnBarriers > 30) {
 	    this.ribbon.GetComponent<Image>().sprite = this.ribbonSprites[7];
-	    this.GetComponent<Text>().text = "Why did you smash so many pumpkins? You were supposed to harvest them!\n~\nWhat, do you think you're in a band or something?";
+	    this.GetComponent<Text>().text = "Why did you smash so many pumpkins? You were supposed to harvest them!\n~\nWhat, do you think you're in a band or something? Get it? Eh? Ehhh?";
 	    this.endingNumberText.text = "- Ending 8 of 10 -";
 	    Settings.RibbonsUnlocked[7] = true;
 	}
