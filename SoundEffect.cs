@@ -7,7 +7,7 @@ public class SoundEffect : MonoBehaviour
 {
     public AudioClip clip;
     public float distance;
-    public float maxDistance = 4.0f;
+    public float maxDistance = 5.0f;
     
     // Start is called before the first frame update
     void Start()

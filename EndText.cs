@@ -47,7 +47,7 @@ public class EndText : MonoBehaviour
 	// do nothing ending
 	if (!Settings.PlayerDidAnything) {
 	    this.ribbon.GetComponent<Image>().sprite = this.ribbonSprites[9];
-	    this.GetComponent<Text>().text = "It's a game about ghosts, but you're not supposed to ghost the game!\n~\nYour failure to act has doomed the farm on a financial and mystical level.";
+	    this.GetComponent<Text>().text = "It's a game about ghosts, but you're not supposed to ghost the game!\n~\nYour failure to act has doomed the farm on both a mystical and financial level.";
 	    this.endingNumberText.text = "- Ending 10 of 10 -";
 	    Settings.RibbonsUnlocked[9] = true;
 	}
